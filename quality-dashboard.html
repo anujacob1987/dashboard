@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Product Recommendation - Quality Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .dashboard {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .section-description {
+            font-size: 0.95em;
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 12px;
+            transition: background 0.3s ease;
+            width: 100%;
+            min-height: 100px;
+            justify-content: center;
+        }
+
+        .badge-container:hover {
+            background: #edf2f7;
+        }
+
+        .badge-label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .sonarqube {
+            background: linear-gradient(135deg, #4c9aff 0%, #0052cc 100%);
+        }
+
+        .sonarqube .section-title {
+            color: white;
+        }
+
+        .sonarqube .section-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .sonarqube .section-header {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .ghas {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        }
+
+        .ghas .section-title {
+            color: white;
+        }
+
+        .ghas .section-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .ghas .section-header {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .osc {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .osc .section-title {
+            color: white;
+        }
+
+        .osc .section-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .osc .section-header {
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .timestamp {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.4em;
+            }
+
+            .badges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .legend {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .critical { background: #dc2626; }
+        .high { background: #ea580c; }
+        .medium { background: #f59e0b; }
+        .low { background: #84cc16; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Intelligent Product Recommendation</h1>
+            <p>Quality & Security Metrics Dashboard</p>
+            <div class="timestamp">
+                📊 Last Updated: <span id="currentTime"></span>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- SonarQube Section -->
+            <div class="section sonarqube">
+                <div class="section-header">
+                    <div class="section-icon">🔍</div>
+                    <div>
+                        <div class="section-title">SonarQube Code Quality</div>
+                        <div class="section-description">Main Branch Quality Metrics</div>
+                    </div>
+                </div>
+                <div class="badges-grid">
+                    <div class="badge-container">
+                        <div class="badge-label">Coverage</div>
+                        <a href="https://sonar.tools.sap/dashboard?id=intelligentprodrecmdn" target="_blank">
+                            <img src="https://sonar.tools.sap/api/project_badges/measure?project=intelligentprodrecmdn&metric=coverage&token=sqb_02827e4e1ca8e03e47504d7c03226076fb2395eb" alt="Coverage">
+                        </a>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Bugs</div>
+                        <a href="https://sonar.tools.sap/dashboard?id=intelligentprodrecmdn" target="_blank">
+                            <img src="https://sonar.tools.sap/api/project_badges/measure?project=intelligentprodrecmdn&metric=bugs&token=sqb_02827e4e1ca8e03e47504d7c03226076fb2395eb" alt="Bugs">
+                        </a>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Code Smells</div>
+                        <a href="https://sonar.tools.sap/dashboard?id=intelligentprodrecmdn" target="_blank">
+                            <img src="https://sonar.tools.sap/api/project_badges/measure?project=intelligentprodrecmdn&metric=code_smells&token=sqb_02827e4e1ca8e03e47504d7c03226076fb2395eb" alt="Code Smells">
+                        </a>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Vulnerabilities</div>
+                        <a href="https://sonar.tools.sap/dashboard?id=intelligentprodrecmdn" target="_blank">
+                            <img src="https://sonar.tools.sap/api/project_badges/measure?project=intelligentprodrecmdn&metric=vulnerabilities&token=sqb_02827e4e1ca8e03e47504d7c03226076fb2395eb" alt="Vulnerabilities">
+                        </a>
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Quality Gate</div>
+                        <a href="https://sonar.tools.sap/dashboard?id=intelligentprodrecmdn" target="_blank">
+                            <img src="https://sonar.tools.sap/api/project_badges/measure?project=intelligentprodrecmdn&metric=alert_status&token=sqb_02827e4e1ca8e03e47504d7c03226076fb2395eb" alt="Quality Gate Status">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Advanced Security Section -->
+            <div class="section ghas">
+                <div class="section-header">
+                    <div class="section-icon">🛡️</div>
+                    <div>
+                        <div class="section-title">GitHub Advanced Security (GHAS)</div>
+                        <div class="section-description">Security Vulnerability Analysis</div>
+                    </div>
+                </div>
+                <div class="badges-grid">
+                    <div class="badge-container">
+                        <div class="badge-label">Critical</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/GHAS/critical.json" alt="Critical">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">High</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/GHAS/high.json" alt="High">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Medium</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/GHAS/medium.json" alt="Medium">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Low</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/GHAS/low.json" alt="Low">
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-title">Severity Levels:</div>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-color critical"></div>
+                            <span>Critical - Immediate action required</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color high"></div>
+                            <span>High - Priority fix needed</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color medium"></div>
+                            <span>Medium - Should be addressed</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color low"></div>
+                            <span>Low - Minor issues</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OSC Section -->
+            <div class="section osc">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">Open Source Component (OSC) Security</div>
+                        <div class="section-description">Third-party Dependency Analysis</div>
+                    </div>
+                </div>
+                <div class="badges-grid">
+                    <div class="badge-container">
+                        <div class="badge-label">Critical</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/OSC/critical.json" alt="Critical">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">High</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/OSC/high.json" alt="High">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Medium</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/OSC/medium.json" alt="Medium">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">Low</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/OSC/low.json" alt="Low">
+                    </div>
+                    <div class="badge-container">
+                        <div class="badge-label">SDOL-005</div>
+                        <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anujacob1987/scan-results/main/IPR/OSC/SDOL-005.json" alt="SDOL-005">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>💡 This dashboard provides real-time insights into code quality and security metrics</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Intelligent Product Recommendation Project © 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('currentTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Add click animation to badge containers
+        document.querySelectorAll('.badge-container').forEach(container => {
+            container.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
